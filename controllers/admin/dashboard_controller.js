@@ -1,5 +1,5 @@
 module.exports.dashboard = (req, res) => {
-    res.render("./client/pages/home/index.pug", {
+    res.render("./admin/pages/dashboard/index.pug", {
         pagaTitle: "home"
     });
 };
