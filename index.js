@@ -6,6 +6,9 @@ app.use(express.static('public'))
 require('dotenv').config();
 const port = process.env.PORT
 
+const database = require("./config/database.js");
+database.connect();
+
 const route = require("./routers/client/index_router.js")
 
 app.set('views', './views')
