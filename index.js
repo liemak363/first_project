@@ -1,6 +1,4 @@
 const express = require('express')
-const mongoose = require('mongoose');
-
 const app = express()
 
 app.use(express.static('public'))
@@ -8,7 +6,8 @@ app.use(express.static('public'))
 require('dotenv').config();
 const port = process.env.PORT
 
-mongoose.connect(process.env.MONGO_URL);
+const database = require("./config/database.js");
+database.connect();
 
 const route = require("./routers/client/index_router.js")
 
