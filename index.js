@@ -1,6 +1,9 @@
 const express = require('express')
 const app = express()
 
+const systemConfig = require("./config/system.js")
+app.locals.prefixAdmin = systemConfig.prefixAdmin
+
 app.use(express.static('public'))
 
 require('dotenv').config();
