@@ -34,11 +34,18 @@ module.exports.products = async (req, res) => {
         find.status = req.query.status
     }
 
+    let keyword = "";
+    if (req.query.keyword) {
+        keyword = req.query.keyword;
+        find.title = keyword;
+    }
+
     const products = await Product.find(find)
 
     res.render("./admin/pages/products/index.pug", {
         pagaTitle: "products",
         products: products,
-        filterStatus: filterStatus
+        filterStatus: filterStatus,
+        keyword: keyword
     });
 };
