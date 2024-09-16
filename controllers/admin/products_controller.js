@@ -1,8 +1,10 @@
 const Product = require("../../models/product_model.js")
 const filerStatusHelper = require("../../helper/filterStatus.js")
+const searchHelper = require("../../helper/search.js")
 
 module.exports.products = async (req, res) => {
-    let filterStatus = filerStatusHelper(req.query)
+    // filter status
+    const filterStatus = filerStatusHelper(req.query)
 
     let find = {
         deleted: false
@@ -11,11 +13,10 @@ module.exports.products = async (req, res) => {
         find.status = req.query.status
     }
 
-    let keyword = "";
-    if (req.query.keyword) {
-        keyword = req.query.keyword;
-        const regex = new RegExp(keyword, "i");
-        find.title = regex;
+    // filter keyword
+    const objSearch = searchHelper(req.query);
+    if (objSearch.title) {
+        find.title = objSearch.title;
     }
 
     const products = await Product.find(find)
@@ -24,6 +25,6 @@ module.exports.products = async (req, res) => {
         pagaTitle: "products",
         products: products,
         filterStatus: filterStatus,
-        keyword: keyword
+        keyword: objSearch.keyword
     });
 };
