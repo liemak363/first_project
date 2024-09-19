@@ -1,6 +1,7 @@
 extends ../../layouts/default.pug
 include ../../mixins/filter-status.pug
 include ../../mixins/search.pug
+include ../../mixins/pagination.pug
 
 block main
     h1 admin products
@@ -50,3 +51,5 @@ block main
                                     button(class="btn btn-warning btn-sm") Sửa
                                     button(class="btn btn-danger btn-sm ml-1") Xóa
 
+    // https://getbootstrap.com/docs/4.6/components/pagination/
+    +pagination(pagination)
