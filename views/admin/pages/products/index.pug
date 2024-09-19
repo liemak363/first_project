@@ -50,3 +50,18 @@ block main
                                     button(class="btn btn-warning btn-sm") Sửa
                                     button(class="btn btn-danger btn-sm ml-1") Xóa
 
+    // https://getbootstrap.com/docs/4.6/components/pagination/
+    nav
+        ul(class="pagination")
+            //- li(class="page-item")
+            //-     button(class="page-link") Trang trước
+
+            - for (var i = 1; i <= pagination.totalPage; ++i) 
+                li(class=`page-item ${pagination.currentPage == i ? "active" : ""}`)
+                    button(
+                        class="page-link"
+                        button-pagination=i
+                    ) #{i}
+
+            //- li(class="page-item")
+            //-     button(class="page-link") Kế tiếp
