@@ -44,7 +44,6 @@ module.exports.products = async (req, res) => {
 
 // [GET] /admin/product/change-status/:status/:id
 module.exports.changeStatus = async (req, res) => {
-    console.log(req.params);
     const status = req.params.status;
     const id = req.params.id;
 

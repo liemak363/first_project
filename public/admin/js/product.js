@@ -12,7 +12,7 @@ if (buttonChangeStatus.length > 0) {
 
             const path = formChangeStatus.getAttribute("data-path");
 
-            formChangeStatus.setAttribute("action", path + `${newStatus}/${id}`)
+            formChangeStatus.setAttribute("action", path + `${newStatus}/${id}?_method=PATCH`)
 
             formChangeStatus.submit()
         })
