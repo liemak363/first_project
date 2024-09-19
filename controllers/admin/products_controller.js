@@ -3,6 +3,7 @@ const filerStatusHelper = require("../../helper/filterStatus.js")
 const searchHelper = require("../../helper/search.js")
 const paginationHelper = require("../../helper/pagination.js")
 
+// [GET] /admin/product
 module.exports.products = async (req, res) => {
     // filter status
     const filterStatus = filerStatusHelper(req.query)
@@ -39,4 +40,15 @@ module.exports.products = async (req, res) => {
         keyword: objSearch.keyword,
         pagination: objectPagination
     });
+};
+
+// [GET] /admin/product/change-status/:status/:id
+module.exports.changeStatus = async (req, res) => {
+    console.log(req.params);
+    const status = req.params.status;
+    const id = req.params.id;
+
+    await Product.updateOne({_id: id}, {status: status});
+
+    res.redirect('back');
 };
