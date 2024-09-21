@@ -18,6 +18,9 @@ database.connect();
 const route = require("./routers/client/index_router.js")
 const adminRoute = require("./routers/admin/index_router.js")
 
+const bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({ extended: false }))
+
 app.set('views', './views')
 app.set('view engine', 'pug')
 
