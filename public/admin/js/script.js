@@ -61,5 +61,61 @@ if (buttonPagination.length > 0) {
         })
     })
 }
-
 // End Pagination
+
+// Checkbox products
+const tableProducts = document.querySelector("[table-products]");
+if (tableProducts) {
+    const inputCheckAll = tableProducts.querySelector("input[name='checkall']");
+    const inputCheckIdArr = tableProducts.querySelectorAll("input[name='id']")
+
+    if (inputCheckIdArr.length) {
+        inputCheckAll.addEventListener("click", () => {
+            if (inputCheckAll.checked) {
+                inputCheckIdArr.forEach((inputCheckId) => {
+                    inputCheckId.checked = true;
+                })
+            } else {
+                inputCheckIdArr.forEach((inputCheckId) => {
+                    inputCheckId.checked = false;
+                })
+            }
+        })
+        
+        inputCheckIdArr.forEach((inputCheckId) => {
+            inputCheckId.addEventListener("click", () => {
+                const countChecked = tableProducts.querySelectorAll("input[name='id']:checked").length;
+                if (countChecked == inputCheckIdArr.length) {
+                    inputCheckAll.checked = true;
+                } else {
+                    inputCheckAll.checked = false;
+                }
+            })
+        });
+    }  
+}
+// End Checkbox products
+
+// Form change status multi
+const formChangeStatusMulti = document.querySelector("[form_change_status_multi]");
+
+formChangeStatusMulti.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const productCheckedArr = tableProducts.querySelectorAll("input[name='id']:checked");
+
+    if (productCheckedArr.length) {
+        const inputIds = formChangeStatusMulti.querySelector("input[name='ids']");
+    
+        if (productCheckedArr.length) {
+            let productCheckedIds = [];
+            productCheckedArr.forEach((product) => {
+                productCheckedIds.push(product.value);
+            })
+            inputIds.value = productCheckedIds.join(", ");
+    
+            formChangeStatusMulti.submit();
+        }
+    }
+});
+// End Form change status multi
