@@ -2,6 +2,7 @@ extends ../../layouts/default.pug
 include ../../mixins/filter-status.pug
 include ../../mixins/search.pug
 include ../../mixins/pagination.pug
+include ../../mixins/form-change-multi-status.pug
 
 block main
     h1 admin products
@@ -19,24 +20,7 @@ block main
     .card.mb-3
         .card-header Danh sách
             .card-body
-                form(
-                    action=`${prefixAdmin}/products/change-status-multi?_method=PATCH`
-                    method="POST"
-                    form_change_status_multi
-                )
-                    .d-flex.align-items-start
-                        .form-group
-                            select(name="type" class="form-control") 
-                                option(value="active") Hoạt động 
-                                option(value="inactive") Dừng hoạt động
-                        .form-group
-                            input(
-                                type="text"
-                                name="ids" 
-                                value=""
-                                class="form-control d-none"
-                            )
-                        button(type="submit" class="btn btn-primary") Áp dụng
+                +form-change-multi-status(`${prefixAdmin}/products/change-status-multi?_method=PATCH`)
 
                 table(
                     class="table table-hover table-sm"
