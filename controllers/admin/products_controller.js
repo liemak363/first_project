@@ -70,3 +70,12 @@ module.exports.changeStatusMulti = async (req, res) => {
 
     res.redirect('back');
 }
+
+// [DELETE] /admin/product/permanent-delete:id
+module.exports.deletePermanent = async (req, res) => {
+    const id = req.params.id;
+
+    await Product.deleteOne({_id: id});
+
+    res.redirect('back');
+};

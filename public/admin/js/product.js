@@ -1,3 +1,4 @@
+// Change product status 
 const buttonChangeStatus = document.querySelectorAll("[button-change-status]")
 
 if (buttonChangeStatus.length > 0) {
@@ -18,4 +19,24 @@ if (buttonChangeStatus.length > 0) {
         })
     })
 }
-// console.log(buttonChangeStatus)
+// End Change product status
+
+// Permanent delete product
+const buttonDeletePer = document.querySelectorAll("[button-permanent-delete]")
+
+if (buttonDeletePer.length > 0) {
+    const formDeletePer = document.querySelector("#form-permanent-delete")
+
+    buttonDeletePer.forEach((button) => {
+        button.addEventListener("click", () => {
+            const id = button.getAttribute("data-id");
+
+            const path = formDeletePer.getAttribute("data-path");
+
+            formDeletePer.setAttribute("action", path + `${id}?_method=DELETE`)
+
+            formDeletePer.submit()
+        })
+    })
+}
+// End Permanent delete product

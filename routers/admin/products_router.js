@@ -9,4 +9,6 @@ router.patch('/change-status/:status/:id', controller.changeStatus)
 
 router.patch('/change-status-multi', controller.changeStatusMulti)
 
+router.delete('/permanent-delete/:id', controller.deletePermanent);
+
 module.exports = router
