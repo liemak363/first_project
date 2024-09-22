@@ -77,9 +77,14 @@ block main
                                     button(class="btn btn-warning btn-sm") Sửa
                                     button(
                                         class="btn btn-danger btn-sm ml-1"
-                                        button-permanent-delete
+                                        button-permanently-delete
                                         data-id=item.id
                                     ) Xóa vĩnh viễn
+                                    button(
+                                        class="btn btn-danger btn-sm ml-1"
+                                        button-recoverable-delete
+                                        data-id=item.id
+                                    ) Xóa mềm
 
     // https://getbootstrap.com/docs/4.6/components/pagination/
     +pagination(pagination)
@@ -94,8 +99,15 @@ block main
     form(
         action=""
         method="POST"
-        id="form-permanent-delete"
-        data-path=`${prefixAdmin}/products/permanent-delete/`
+        id="form-permanently-delete"
+        data-path=`${prefixAdmin}/products/permanently-delete/`
+    )
+
+    form(
+        action=""
+        method="POST"
+        id="form-recoverable-delete"
+        data-path=`${prefixAdmin}/products/recoverable-delete/`
     )
 
     script(src="/admin/js/product.js")

@@ -21,11 +21,11 @@ if (buttonChangeStatus.length > 0) {
 }
 // End Change product status
 
-// Permanent delete product
-const buttonDeletePer = document.querySelectorAll("[button-permanent-delete]")
+// Permanently delete product
+const buttonDeletePer = document.querySelectorAll("[button-permanently-delete]")
 
 if (buttonDeletePer.length > 0) {
-    const formDeletePer = document.querySelector("#form-permanent-delete")
+    const formDeletePer = document.querySelector("#form-permanently-delete")
 
     buttonDeletePer.forEach((button) => {
         button.addEventListener("click", () => {
@@ -39,4 +39,24 @@ if (buttonDeletePer.length > 0) {
         })
     })
 }
-// End Permanent delete product
+// End Permanently delete product
+
+// Recoverablely delete product
+const buttonDeleteRecover = document.querySelectorAll("[button-recoverable-delete]")
+
+if (buttonDeleteRecover.length > 0) {
+    const formDeleteRecover = document.querySelector("#form-recoverable-delete")
+
+    buttonDeleteRecover.forEach((button) => {
+        button.addEventListener("click", () => {
+            const id = button.getAttribute("data-id");
+
+            const path = formDeleteRecover.getAttribute("data-path");
+
+            formDeleteRecover.setAttribute("action", path + `${id}?_method=DELETE`)
+
+            formDeleteRecover.submit()
+        })
+    })
+}
+// End Recoverablely delete product
