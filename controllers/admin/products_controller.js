@@ -53,7 +53,7 @@ module.exports.changeStatus = async (req, res) => {
 };
 
 // [PATCH] /admin/products/change_status_multi
-module.exports.changeStatusMulti = async (req, res) => {
+module.exports.changeMulti = async (req, res) => {
     const type = req.body.type;
     const ids = req.body.ids.split(", ");
 
@@ -64,9 +64,36 @@ module.exports.changeStatusMulti = async (req, res) => {
         case "inactive":
             await Product.updateMany({_id: {$in: ids}}, {status: "inactive"});
             break;
+        case "soft-delete":
+            await Product.updateMany({_id: {$in: ids}}, {
+                deleted: true,
+                deletedAt: new Date()
+            });
+            break;
         default:
             break;
     }
 
     res.redirect('back');
 }
+
+// [DELETE] /admin/product/permanently-delete:id
+module.exports.deletePermanently = async (req, res) => {
+    const id = req.params.id;
+
+    await Product.deleteOne({_id: id});
+
+    res.redirect('back');
+};
+
+// [DELETE] /admin/product/recoverablely-delete:id
+module.exports.deleteRecoverable = async (req, res) => {
+    const id = req.params.id;
+
+    await Product.updateOne({_id: id}, {
+        deleted: true,
+        deletedAt: new Date()
+    });
+
+    res.redirect('back');
+};

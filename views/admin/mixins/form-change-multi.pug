@@ -1,14 +1,16 @@
-mixin form-change-multi-status(path)
+mixin form-change-multi(path)
     form(
         action=path
         method="POST"
-        form_change_status_multi
+        form-change-multi
     )
         .d-flex.align-items-start
             .form-group
                 select(name="type" class="form-control") 
+                    option(disabled selected) -- Chọn hoạt động --
                     option(value="active") Hoạt động 
                     option(value="inactive") Dừng hoạt động
+                    option(value="soft-delete") Xóa mềm
             .form-group
                 input(
                     type="text"
