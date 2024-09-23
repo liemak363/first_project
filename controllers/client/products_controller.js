@@ -6,11 +6,9 @@ module.exports.products = async (req, res) => {
         deleted: false
     })
     const newProducts = products.map((item) => {
-        item.priceNew = (item.price*(100 - item.discountPercentage)).toFixed(0);
+        item.priceNew = (item.price*(100 - item.discountPercentage)/100).toFixed(0);
         return item;
     })
-
-    console.log(newProducts);
 
     res.render("./client/pages/products/index.pug", {
         pageTitle: "product",
