@@ -53,7 +53,7 @@ module.exports.changeStatus = async (req, res) => {
 };
 
 // [PATCH] /admin/products/change_status_multi
-module.exports.changeStatusMulti = async (req, res) => {
+module.exports.changeMulti = async (req, res) => {
     const type = req.body.type;
     const ids = req.body.ids.split(", ");
 
@@ -63,6 +63,12 @@ module.exports.changeStatusMulti = async (req, res) => {
             break;
         case "inactive":
             await Product.updateMany({_id: {$in: ids}}, {status: "inactive"});
+            break;
+        case "soft-delete":
+            await Product.updateMany({_id: {$in: ids}}, {
+                deleted: true,
+                deletedAt: new Date()
+            });
             break;
         default:
             break;

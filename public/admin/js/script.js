@@ -97,25 +97,29 @@ if (tableProducts) {
 // End Checkbox products
 
 // Form change status multi
-const formChangeStatusMulti = document.querySelector("[form_change_status_multi]");
+const formChangeMulti = document.querySelector("[form-change-multi]");
 
-formChangeStatusMulti.addEventListener("submit", (e) => {
+formChangeMulti.addEventListener("submit", (e) => {
     e.preventDefault();
 
     const productCheckedArr = tableProducts.querySelectorAll("input[name='id']:checked");
 
     if (productCheckedArr.length) {
-        const inputIds = formChangeStatusMulti.querySelector("input[name='ids']");
-    
-        if (productCheckedArr.length) {
-            let productCheckedIds = [];
-            productCheckedArr.forEach((product) => {
-                productCheckedIds.push(product.value);
-            })
-            inputIds.value = productCheckedIds.join(", ");
-    
-            formChangeStatusMulti.submit();
+        const typeChange = e.target.elements.type.value;
+        if (typeChange == "soft-delete") {
+            const confirm = window.confirm("Bạn có muốn xóa những sản phẩm được chọn ?")
+            if (!confirm) return;
         }
+
+        const inputIds = formChangeMulti.querySelector("input[name='ids']");
+    
+        let productCheckedIds = [];
+        productCheckedArr.forEach((product) => {
+            productCheckedIds.push(product.value);
+        })
+        inputIds.value = productCheckedIds.join(", ");
+
+        formChangeMulti.submit();
     }
 });
 // End Form change status multi

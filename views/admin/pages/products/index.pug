@@ -2,7 +2,7 @@ extends ../../layouts/default.pug
 include ../../mixins/filter-status.pug
 include ../../mixins/search.pug
 include ../../mixins/pagination.pug
-include ../../mixins/form-change-multi-status.pug
+include ../../mixins/form-change-multi.pug
 
 block main
     h1 admin products
@@ -20,7 +20,7 @@ block main
     .card.mb-3
         .card-header Danh sách
             .card-body
-                +form-change-multi-status(`${prefixAdmin}/products/change-status-multi?_method=PATCH`)
+                +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
 
                 table(
                     class="table table-hover table-sm"
