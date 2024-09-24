@@ -30,7 +30,9 @@ module.exports.products = async (req, res) => {
 
     // end pagination
 
-    const products = await Product.find(find).limit(objectPagination.limitItems)
+    const products = await Product.find(find)
+        .sort({position: "desc"})
+        .limit(objectPagination.limitItems)
         .skip(objectPagination.skip)
 
     res.render("./admin/pages/products/index.pug", {
