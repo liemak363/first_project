@@ -115,7 +115,12 @@ formChangeMulti.addEventListener("submit", (e) => {
     
         let productCheckedIds = [];
         productCheckedArr.forEach((product) => {
-            productCheckedIds.push(product.value);
+            if (typeChange == "change-position") {
+                const positionNew = product.closest("tr").querySelector("input[name='position']").value;
+                
+                productCheckedIds.push(`${product.value}-${positionNew}`);
+            }
+            else productCheckedIds.push(product.value);
         })
         inputIds.value = productCheckedIds.join(", ");
 
