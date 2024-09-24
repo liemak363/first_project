@@ -3,8 +3,11 @@ include ../../mixins/filter-status.pug
 include ../../mixins/search.pug
 include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
+include ../../mixins/notification.pug
 
 block main
+    +notification-success("5000")
+
     h1 admin products
 
     
