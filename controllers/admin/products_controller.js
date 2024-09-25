@@ -49,6 +49,8 @@ module.exports.changeStatus = async (req, res) => {
     const status = req.params.status;
     const id = req.params.id;
 
+    req.flash('success', 'change successfully');
+
     await Product.updateOne({_id: id}, {status: status});
 
     res.redirect('back');
@@ -62,15 +64,18 @@ module.exports.changeMulti = async (req, res) => {
     switch (type) {
         case "active":
             await Product.updateMany({_id: {$in: ids}}, {status: "active"});
+            req.flash('success', 'change successfully');
             break;
         case "inactive":
             await Product.updateMany({_id: {$in: ids}}, {status: "inactive"});
+            req.flash('success', 'change successfully');
             break;
         case "soft-delete":
             await Product.updateMany({_id: {$in: ids}}, {
                 deleted: true,
                 deletedAt: new Date()
             });
+            req.flash('success', 'delete successfully');
             break;
         case "change-position":
             for (const item of ids) {
@@ -78,6 +83,7 @@ module.exports.changeMulti = async (req, res) => {
                 position = parseInt(position);
 
                 await Product.updateOne({_id: id}, {position: position});
+                req.flash('success', 'change successfully');
             }
             break;
         default:
@@ -91,6 +97,8 @@ module.exports.changeMulti = async (req, res) => {
 module.exports.deletePermanently = async (req, res) => {
     const id = req.params.id;
 
+    req.flash('success', 'delete successfully');
+
     await Product.deleteOne({_id: id});
 
     res.redirect('back');
@@ -99,6 +107,8 @@ module.exports.deletePermanently = async (req, res) => {
 // [DELETE] /admin/product/recoverablely-delete:id
 module.exports.deleteRecoverable = async (req, res) => {
     const id = req.params.id;
+
+    req.flash('success', 'delete successfully');
 
     await Product.updateOne({_id: id}, {
         deleted: true,
