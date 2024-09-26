@@ -13,4 +13,8 @@ router.delete('/permanently-delete/:id', controller.deletePermanently);
 
 router.delete('/recoverable-delete/:id', controller.deleteRecoverable);
 
+router.get("/create", controller.create);
+
+router.post("/create", controller.createPost);
+
 module.exports = router

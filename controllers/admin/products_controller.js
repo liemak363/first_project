@@ -2,6 +2,7 @@ const Product = require("../../models/product_model.js")
 const filerStatusHelper = require("../../helper/filterStatus.js")
 const searchHelper = require("../../helper/search.js")
 const paginationHelper = require("../../helper/pagination.js")
+const systemConfig = require("../../config/system.js")
 
 // [GET] /admin/product
 module.exports.products = async (req, res) => {
@@ -117,3 +118,26 @@ module.exports.deleteRecoverable = async (req, res) => {
 
     res.redirect('back');
 };
+
+// [GET] /admin/product/create
+module.exports.create = (req, res) => {
+    res.render("./admin/pages/products/create.pug", {
+        pageTitle: "create product"
+    })
+}
+
+// [POST] /admin/product/create
+module.exports.createPost = async (req, res) => {
+    req.body.price = parseInt(req.body.price);
+    req.body.discountPercentage = parseInt(req.body.discountPercentage);
+
+    if (req.body.position == "") {
+        const countProducts = await Product.countDocuments();
+        req.body.position = countProducts + 1;
+    } else req.body.position = parseInt(req.body.position);
+
+    const productNew = new Product(req.body);
+    await productNew.save();
+
+    res.redirect(`${systemConfig.prefixAdmin}/products`);
+}
