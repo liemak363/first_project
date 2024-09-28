@@ -99,34 +99,36 @@ if (tableProducts) {
 // Form change status multi
 const formChangeMulti = document.querySelector("[form-change-multi]");
 
-formChangeMulti.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const productCheckedArr = tableProducts.querySelectorAll("input[name='id']:checked");
-
-    if (productCheckedArr.length) {
-        const typeChange = e.target.elements.type.value;
-        if (typeChange == "soft-delete") {
-            const confirm = window.confirm("Bạn có muốn xóa những sản phẩm được chọn ?")
-            if (!confirm) return;
-        }
-
-        const inputIds = formChangeMulti.querySelector("input[name='ids']");
+if (formChangeMulti) {
+    formChangeMulti.addEventListener("submit", (e) => {
+        e.preventDefault();
     
-        let productCheckedIds = [];
-        productCheckedArr.forEach((product) => {
-            if (typeChange == "change-position") {
-                const positionNew = product.closest("tr").querySelector("input[name='position']").value;
-                
-                productCheckedIds.push(`${product.value}-${positionNew}`);
+        const productCheckedArr = tableProducts.querySelectorAll("input[name='id']:checked");
+    
+        if (productCheckedArr.length) {
+            const typeChange = e.target.elements.type.value;
+            if (typeChange == "soft-delete") {
+                const confirm = window.confirm("Bạn có muốn xóa những sản phẩm được chọn ?")
+                if (!confirm) return;
             }
-            else productCheckedIds.push(product.value);
-        })
-        inputIds.value = productCheckedIds.join(", ");
-
-        formChangeMulti.submit();
-    }
-});
+    
+            const inputIds = formChangeMulti.querySelector("input[name='ids']");
+        
+            let productCheckedIds = [];
+            productCheckedArr.forEach((product) => {
+                if (typeChange == "change-position") {
+                    const positionNew = product.closest("tr").querySelector("input[name='position']").value;
+                    
+                    productCheckedIds.push(`${product.value}-${positionNew}`);
+                }
+                else productCheckedIds.push(product.value);
+            })
+            inputIds.value = productCheckedIds.join(", ");
+    
+            formChangeMulti.submit();
+        }
+    });
+}
 // End Form change status multi
 
 // Show notification
@@ -144,3 +146,19 @@ if (showNotification) {
     })
 }
 // End Show notification
+
+// Preview image
+const uploadImage = document.querySelector("[upload-image]");
+
+if (uploadImage) {
+    const uploadImageInput = uploadImage.querySelector("[upload-image-input]");
+    const uploadImagePreview = uploadImage.querySelector("[upload-image-preview]");
+
+    uploadImageInput.addEventListener("change", (e) => {
+        const [file] = e.target.files;
+        if (file) {
+            uploadImagePreview.src = URL.createObjectURL(file)
+        }
+    })
+}
+// End Preview image
