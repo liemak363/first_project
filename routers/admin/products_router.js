@@ -6,6 +6,7 @@ const storageMulter = require("../../helper/storageMulter.js")
 const upload = multer({ storage: storageMulter() })
 
 const controller = require("../../controllers/admin/products_controller.js")
+const productValidate = require("../../validates/admin/product_validate.js")
 
 router.get('/', controller.products)
 
@@ -19,6 +20,9 @@ router.delete('/recoverable-delete/:id', controller.deleteRecoverable);
 
 router.get("/create", controller.create);
 
-router.post("/create",  upload.single('thumbnail'), controller.createPost);
+router.post("/create",  upload.single('thumbnail'),
+    productValidate.createPost,
+    controller.createPost
+);
 
 module.exports = router
