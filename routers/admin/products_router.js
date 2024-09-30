@@ -25,4 +25,12 @@ router.post("/create",  upload.single('thumbnail'),
     controller.createPost
 );
 
+router.get("/edit/:id", controller.edit);
+
+router.patch("/edit/:id", 
+    upload.single('thumbnail'),
+    productValidate.createPost,
+    controller.editPatch
+);
+
 module.exports = router
