@@ -145,3 +145,32 @@ module.exports.createPost = async (req, res) => {
 
     res.redirect(`${systemConfig.prefixAdmin}/products`);
 }
+
+// [GET] /admin/product/edit/:id
+module.exports.edit = async (req, res) => {
+    const id = req.params.id;
+
+    const product = await Product.findOne({
+        _id: id,
+        deleted: false
+    });
+
+    res.render("./admin/pages/products/edit.pug", {
+        pageTitle: "edit product",
+        product: product
+    })
+}
+
+// [PATCH] /admin/product/edit/:id
+module.exports.editPatch = async (req, res) => {
+    const id = req.params.id;
+
+    await Product.updateOne({
+        _id: id,
+        deleted: false
+    }, req.body);
+
+    req.flash('success', 'edit successfully');
+
+    res.redirect("back");
+}
