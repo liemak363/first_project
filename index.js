@@ -9,7 +9,7 @@ app.use(methodOverride('_method'))
 const systemConfig = require("./config/system.js")
 app.locals.prefixAdmin = systemConfig.prefixAdmin
 
-app.use(express.static('public'))
+app.use(express.static(`${__dirname}/public`))
 
 require('dotenv').config();
 const port = process.env.PORT
@@ -28,7 +28,7 @@ app.use(cookieParser('keyboard cat'));
 app.use(session({ cookie: { maxAge: 60000 }}));
 app.use(flash());
 
-app.set('views', './views')
+app.set('views', `${__dirname}/views`)
 app.set('view engine', 'pug')
 
 // router
