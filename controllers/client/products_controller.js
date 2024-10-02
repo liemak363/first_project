@@ -15,3 +15,25 @@ module.exports.products = async (req, res) => {
         products: newProducts
     });
 }
+
+// [GET] /products/detail/:slug
+module.exports.detail = async (req, res) => {
+    const slug = req.params.slug;
+
+    try {
+        const product = await Product.findOne({
+            slug: slug,
+            status: "active",
+            deleted: false
+        });
+    
+        res.render("./client/pages/products/detail.pug", {
+            pageTitle: product.title,
+            product: product
+        })
+    }
+    catch(error) {
+        req.flash("error", "the product is invalid")
+        res.redirect(`/products`);
+    }
+}

@@ -1,0 +1,25 @@
+extends ../../layouts/default.pug
+
+block main
+    if (product.title)
+        h1(class="mb-4") #{product.title}
+
+    if (product.price)
+        div(class="mb-4") Giá: <b>#{product.price}$</b>
+
+    if (product.discountPercentage)
+        div(class="mb-4") Giảm giá: <b>#{product.discountPercentage}%</b>
+
+    if (product.thumbnail)
+        div(class="mb-4")
+            img(
+                src=product.thumbnail style="width: 100px"
+            )
+
+    if (product.description)
+        div(class="mb-4") #{product.description}
+
+    a(href=`/products`)
+        button(class="btn btn-primary btn-sm") Về trang danh sách
+
+    script(src="/admin/js/product.js")

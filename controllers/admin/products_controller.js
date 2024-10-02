@@ -50,11 +50,17 @@ module.exports.changeStatus = async (req, res) => {
     const status = req.params.status;
     const id = req.params.id;
 
-    req.flash('success', 'change successfully');
+    try {
+        await Product.updateOne({_id: id}, {status: status});
 
-    await Product.updateOne({_id: id}, {status: status});
-
-    res.redirect('back');
+        req.flash('success', 'change successfully');
+    
+        res.redirect('back');
+    }
+    catch(error) {
+        req.flash("error", "the product is invalid")
+        res.redirect(`${systemConfig.prefixAdmin}/products`);
+    }
 };
 
 // [PATCH] /admin/products/change_status_multi
@@ -64,27 +70,51 @@ module.exports.changeMulti = async (req, res) => {
 
     switch (type) {
         case "active":
-            await Product.updateMany({_id: {$in: ids}}, {status: "active"});
-            req.flash('success', 'change successfully');
+            try {
+                await Product.updateMany({_id: {$in: ids}}, {status: "active"});
+                req.flash('success', 'change successfully');
+            }
+            catch(error) {
+                req.flash("error", "the product is invalid")
+                res.redirect(`${systemConfig.prefixAdmin}/products`);
+            }
             break;
         case "inactive":
-            await Product.updateMany({_id: {$in: ids}}, {status: "inactive"});
-            req.flash('success', 'change successfully');
+            try {
+                await Product.updateMany({_id: {$in: ids}}, {status: "inactive"});
+                req.flash('success', 'change successfully');
+            }
+            catch(error) {
+                req.flash("error", "the product is invalid")
+                res.redirect(`${systemConfig.prefixAdmin}/products`);
+            }
             break;
         case "soft-delete":
-            await Product.updateMany({_id: {$in: ids}}, {
-                deleted: true,
-                deletedAt: new Date()
-            });
-            req.flash('success', 'delete successfully');
+            try {
+                await Product.updateMany({_id: {$in: ids}}, {
+                    deleted: true,
+                    deletedAt: new Date()
+                });
+                req.flash('success', 'delete successfully');
+            }
+            catch(error) {
+                req.flash("error", "the product is invalid")
+                res.redirect(`${systemConfig.prefixAdmin}/products`);
+            }
             break;
         case "change-position":
             for (const item of ids) {
                 let [id, position] = item.split("-");
                 position = parseInt(position);
 
-                await Product.updateOne({_id: id}, {position: position});
-                req.flash('success', 'change successfully');
+                try {
+                    await Product.updateOne({_id: id}, {position: position});
+                    req.flash('success', 'change successfully');
+                }
+                catch {
+                    req.flash("error", "the product is invalid")
+                    res.redirect(`${systemConfig.prefixAdmin}/products`);
+                }
             }
             break;
         default:
@@ -98,25 +128,37 @@ module.exports.changeMulti = async (req, res) => {
 module.exports.deletePermanently = async (req, res) => {
     const id = req.params.id;
 
-    req.flash('success', 'delete successfully');
+    try {
+        await Product.deleteOne({_id: id});
 
-    await Product.deleteOne({_id: id});
-
-    res.redirect('back');
+        req.flash('success', 'delete successfully');
+    
+        res.redirect('back');
+    }
+    catch(error) {
+        req.flash("error", "the product is invalid")
+        res.redirect(`${systemConfig.prefixAdmin}/products`);
+    }
 };
 
 // [DELETE] /admin/product/recoverablely-delete:id
 module.exports.deleteRecoverable = async (req, res) => {
     const id = req.params.id;
 
-    req.flash('success', 'delete successfully');
-
-    await Product.updateOne({_id: id}, {
-        deleted: true,
-        deletedAt: new Date()
-    });
-
-    res.redirect('back');
+    try {
+        await Product.updateOne({_id: id}, {
+            deleted: true,
+            deletedAt: new Date()
+        });
+    
+        req.flash('success', 'delete successfully');
+    
+        res.redirect('back');
+    }
+    catch(error) {
+        req.flash("error", "the product is invalid")
+        res.redirect(`${systemConfig.prefixAdmin}/products`);
+    }
 };
 
 // [GET] /admin/product/create
@@ -150,27 +192,62 @@ module.exports.createPost = async (req, res) => {
 module.exports.edit = async (req, res) => {
     const id = req.params.id;
 
-    const product = await Product.findOne({
-        _id: id,
-        deleted: false
-    });
-
-    res.render("./admin/pages/products/edit.pug", {
-        pageTitle: "edit product",
-        product: product
-    })
+    try {
+        const product = await Product.findOne({
+            _id: id,
+            deleted: false
+        });
+    
+        res.render("./admin/pages/products/edit.pug", {
+            pageTitle: "edit product",
+            product: product
+        })
+    }
+    catch {
+        req.flash("error", "the product is invalid")
+        res.redirect(`${systemConfig.prefixAdmin}/products`);
+    }
+    
 }
 
 // [PATCH] /admin/product/edit/:id
 module.exports.editPatch = async (req, res) => {
     const id = req.params.id;
 
-    await Product.updateOne({
-        _id: id,
-        deleted: false
-    }, req.body);
+    try {
+        await Product.updateOne({
+            _id: id,
+            deleted: false
+        }, req.body);
+    
+        req.flash('success', 'edit successfully');
+    
+        res.redirect("back");
+    }
+    catch(error) {
+        req.flash("error", "the product is invalid")
+        res.redirect(`${systemConfig.prefixAdmin}/products`);
+    }
+}
 
-    req.flash('success', 'edit successfully');
+// [GET] /admin/product/detail/:id
+module.exports.detail = async (req, res) => {
+    const id = req.params.id;
 
-    res.redirect("back");
+    try {
+        const product = await Product.findOne({
+            _id: id,
+            deleted: false
+        });
+    
+        res.render("./admin/pages/products/detail.pug", {
+            pageTitle: product.title,
+            product: product
+        })
+    }
+    catch(error) {
+        req.flash("error", "the product is invalid")
+        res.redirect(`${systemConfig.prefixAdmin}/products`);
+    }
+    
 }
