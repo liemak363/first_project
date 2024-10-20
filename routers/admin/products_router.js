@@ -2,8 +2,9 @@ const express = require('express')
 const router = express.Router();
 
 const multer  = require('multer')
-const storageMulter = require("../../helper/storageMulter.js")
-const upload = multer({ storage: storageMulter() })
+const upload = multer()
+
+const uploadCloud = require("../../middleware/admin/uploadCloud_middleware.js")
 
 const controller = require("../../controllers/admin/products_controller.js")
 const productValidate = require("../../validates/admin/product_validate.js")
@@ -21,6 +22,7 @@ router.delete('/recoverable-delete/:id', controller.deleteRecoverable);
 router.get("/create", controller.create);
 
 router.post("/create",  upload.single('thumbnail'),
+    uploadCloud.upload,
     productValidate.createPost,
     controller.createPost
 );
@@ -29,6 +31,7 @@ router.get("/edit/:id", controller.edit);
 
 router.patch("/edit/:id", 
     upload.single('thumbnail'),
+    uploadCloud.upload,
     productValidate.createPost,
     controller.editPatch
 );
