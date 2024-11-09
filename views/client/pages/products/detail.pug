@@ -1,14 +1,23 @@
 extends ../../layouts/default.pug
+include ../../mixins/notification.pug
 
 block main
+    +notification-success("5000")
+    +notification-error("5000")
+
+    link(href="/css/productDetail.css", rel="stylesheet")
+
     if (product.title)
         h1(class="mb-4") #{product.title}
 
     if (product.price)
-        div(class="mb-4") Giá: <b>#{product.price}$</b>
+        div(class="mb-4") Giá cũ: <b class="price-old">#{product.price}$</b>
 
     if (product.discountPercentage)
         div(class="mb-4") Giảm giá: <b>#{product.discountPercentage}%</b>
+
+    if (product.priceNew)
+        div(class="mb-4") Giá mới: <b class="price-new">#{product.priceNew}$</b>
 
     if (product.thumbnail)
         div(class="mb-4")
@@ -19,7 +28,28 @@ block main
     if (product.description)
         div(class="mb-4") #{product.description}
 
+    form(
+        action=`/products/buy/${product.slug}`
+        id="form-buy-product"
+        method="POST"
+    ) 
+        div(class="form-group") 
+            label(for="number-products") Số lượng: 
+            input(
+                type="number"
+                id="number-products" 
+                name="numberProducts" 
+                value="1"
+                min="1"
+            )
+        
+        if (product.priceNew)
+            div(class="mb-4") Tổng cộng: <b class="total-price">#{product.priceNew}$</b>
+
+        div(class="form-group")
+            button(type="submit" class="btn btn-danger") Đặt mua
+
     a(href=`/products`)
         button(class="btn btn-primary btn-sm") Về trang danh sách
 
-    script(src="/admin/js/product.js")
+    script(src="/js/productDetail.js")

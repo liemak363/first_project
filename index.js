@@ -14,9 +14,6 @@ app.use(express.static(`${__dirname}/public`))
 require('dotenv').config();
 const port = process.env.PORT
 
-const route = require("./routers/client/index_router.js")
-const adminRoute = require("./routers/admin/index_router.js")
-
 const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -44,7 +41,11 @@ const connectTrackingDatabase = new Promise(async (resolve, reject) => {
 
 // listen to port
 connectTrackingDatabase.then(async (clientRedis) => {
+    module.exports.clientRedis = clientRedis;
+
     // router
+    const route = require("./routers/client/index_router.js")
+    const adminRoute = require("./routers/admin/index_router.js")
     route(app)
     adminRoute(app);
 
@@ -68,7 +69,7 @@ connectTrackingDatabase.then(async (clientRedis) => {
 
             // update product
             const newNumSelled = product[0].numSelled + numSelledCounted;
-            const newSeeding = product[0].seeding*0.5 + numSelledCounted*0.5;
+            const newSeeding = Math.floor(product[0].seeding*0.5 + numSelledCounted*0.5);
             await Product.updateOne({slug: key.slice(15)}, {
                 numSelled: newNumSelled,
                 seeding: newSeeding
