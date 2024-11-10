@@ -173,6 +173,8 @@ module.exports.create = (req, res) => {
 module.exports.createPost = async (req, res) => {
     req.body.price = parseInt(req.body.price);
     req.body.discountPercentage = parseInt(req.body.discountPercentage);
+    req.body.numSelled = 0;
+    req.body.seeding = 0;
 
     if (req.body.position == "") {
         const countProducts = await Product.countDocuments();
@@ -181,6 +183,9 @@ module.exports.createPost = async (req, res) => {
 
     const productNew = new Product(req.body);
     await productNew.save();
+
+    const slug = productNew.slug;
+    await startApp.clientRedis.set(`productSeeding:${slug}`, '0');
 
     res.redirect(`${systemConfig.prefixAdmin}/products`);
 }
