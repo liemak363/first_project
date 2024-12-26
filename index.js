@@ -58,14 +58,14 @@ connectTrackingDatabase.then(async (clientRedis) => {
     async function seeding() {
         // key == 'productSeeding:slug'
         const keys = await clientRedis.keys('productSeeding:*');
-        console.log(keys);
+        // console.log(keys);
 
         for (const key of keys) {
             let numSelledCounted = await clientRedis.get(key);
             numSelledCounted = parseInt(numSelledCounted);
 
             const product = await Product.find({slug: key.slice(15)});
-            console.log(product);
+            // console.log(product);
 
             // update product
             const newNumSelled = product[0].numSelled + numSelledCounted;
@@ -77,7 +77,7 @@ connectTrackingDatabase.then(async (clientRedis) => {
             
             clientRedis.set(key, 0);
         }
-        console.log("ok");
+        // console.log("ok");
     }
-    setInterval(seeding, 5000);
+    setInterval(seeding, 20000);
 })

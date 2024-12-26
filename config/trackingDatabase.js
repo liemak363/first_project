@@ -13,9 +13,5 @@ module.exports.getClient = async () => {
 
     await client.connect();
 
-    await client.set('foo', 'bar');
-    const value = await client.get('foo');
-    console.log(value)
-
     return client;
 }

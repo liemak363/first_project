@@ -125,9 +125,9 @@
 [show-notification] [close-notification] {
     background:#ffffffc4;
     display: inline-block;
-    width: 24px;
-    height: 24px;
-    line-height: 24px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
     text-align: center;
     font-weight: 600; 
     border-radius: 50%; 
