@@ -3,6 +3,7 @@ const filerStatusHelper = require("../../helper/filterStatus.js")
 const searchHelper = require("../../helper/search.js")
 const paginationHelper = require("../../helper/pagination.js")
 const systemConfig = require("../../config/system.js")
+const startApp = require("../../index.js");
 
 // [GET] /admin/product
 module.exports.products = async (req, res) => {
@@ -172,6 +173,8 @@ module.exports.create = (req, res) => {
 module.exports.createPost = async (req, res) => {
     req.body.price = parseInt(req.body.price);
     req.body.discountPercentage = parseInt(req.body.discountPercentage);
+    req.body.numSelled = 0;
+    req.body.seeding = 0;
 
     if (req.body.position == "") {
         const countProducts = await Product.countDocuments();
@@ -180,6 +183,9 @@ module.exports.createPost = async (req, res) => {
 
     const productNew = new Product(req.body);
     await productNew.save();
+
+    const slug = productNew.slug;
+    await startApp.clientRedis.set(`productSeeding:${slug}`, '0');
 
     res.redirect(`${systemConfig.prefixAdmin}/products`);
 }
@@ -209,6 +215,8 @@ module.exports.edit = async (req, res) => {
 // [PATCH] /admin/product/edit/:id
 module.exports.editPatch = async (req, res) => {
     const id = req.params.id;
+    const product = await Product.findOne({_id: id});
+    const oldSlug = product.slug;
 
     try {
         req.body.price = parseInt(req.body.price);
@@ -221,6 +229,11 @@ module.exports.editPatch = async (req, res) => {
         }, req.body);
     
         req.flash('success', 'edit successfully');
+
+        // update tracking database
+        const product = await Product.findOne({_id: id});
+        const newSlug = product.slug;
+        await startApp.clientRedis.rename(`productSeeding:${oldSlug}`, `productSeeding:${newSlug}`);
     
         res.redirect("back");
     }

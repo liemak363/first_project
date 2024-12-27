@@ -44,6 +44,8 @@ block main
                         th Hình ảnh 
                         th Tiêu đề 
                         th Giá
+                        th Lượt bán
+                        th Seeding
                         th Vị trí
                         th Trạng thái
                         th Hành động
@@ -68,6 +70,8 @@ block main
                                 
                                 td #{item.title}
                                 td #{item.price}$
+                                td #{item.numSelled}
+                                td #{item.seeding}
                                 td  
                                     input(
                                         type="number"

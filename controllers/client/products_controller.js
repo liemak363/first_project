@@ -1,10 +1,14 @@
 const Product = require("../../models/product_model.js")
+const index = require("../../index.js");
 
 module.exports.products = async (req, res) => {
     const products = await Product.find({
         status: "active",
         deleted: false
-    }).sort({position: "desc"})
+    }).sort({
+        seeding: "desc",
+        position: "desc"
+    })
     const newProducts = products.map((item) => {
         item.priceNew = (item.price*(100 - item.discountPercentage)/100).toFixed(0);
         return item;
@@ -26,6 +30,7 @@ module.exports.detail = async (req, res) => {
             status: "active",
             deleted: false
         });
+        product.priceNew = (product.price*(100 - product.discountPercentage)/100).toFixed(0);
     
         res.render("./client/pages/products/detail.pug", {
             pageTitle: product.title,
@@ -36,4 +41,22 @@ module.exports.detail = async (req, res) => {
         req.flash("error", "the product is invalid")
         res.redirect(`/products`);
     }
+}
+
+// [POST] /buy/:slug
+module.exports.buy = async (req, res) => {
+    try {
+        const slug = req.params.slug;
+        const numberProduct = req.body.numberProducts;
+    
+        const currentSeeding = parseInt(await index.clientRedis.get(`productSeeding:${slug}`));
+        await index.clientRedis.set(`productSeeding:${slug}`, (currentSeeding + numberProduct));
+    
+        req.flash('success', 'order successfully');
+    }
+    catch (err) {
+        req.flash("error", "order failed")
+    }
+
+    res.redirect("back");
 }
