@@ -1,4 +1,6 @@
 const express = require('express')
+var path = require('path');
+
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
 const app = express()
@@ -17,10 +19,14 @@ const port = process.env.PORT
 const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ extended: false }))
 
+// Flash
 const flash = require('express-flash')
 app.use(cookieParser('keyboard cat'));
 app.use(session({ cookie: { maxAge: 60000 }}));
 app.use(flash());
+
+// Tinymce
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
 
 app.set('views', `${__dirname}/views`)
 app.set('view engine', 'pug')
