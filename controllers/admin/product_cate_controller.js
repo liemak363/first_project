@@ -132,3 +132,25 @@ module.exports.createPost = async (req, res) => {
 
     console.log(req.body)
 }
+
+// [GET] /admin/product/detail/:id
+module.exports.detail = async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const record = await ProductCate.findOne({
+            _id: id,
+            deleted: false
+        });
+    
+        res.render("./admin/pages/product_cate/detail.pug", {
+            pageTitle: record.title,
+            record: record
+        })
+    }
+    catch(error) {
+        req.flash("error", "the product is invalid")
+        res.redirect(`${systemConfig.prefixAdmin}/product-category`);
+    }
+    
+}
