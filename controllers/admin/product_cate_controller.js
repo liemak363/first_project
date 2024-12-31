@@ -133,6 +133,52 @@ module.exports.createPost = async (req, res) => {
     console.log(req.body)
 }
 
+// [GET] /admin/product/edit/:id
+module.exports.edit = async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const record = await ProductCate.findOne({
+            _id: id,
+            deleted: false
+        });
+    
+        res.render("./admin/pages/product_cate/edit.pug", {
+            pageTitle: "edit product",
+            record: record
+        })
+    }
+    catch {
+        req.flash("error", "the product is invalid")
+        res.redirect(`${systemConfig.prefixAdmin}/product-category`);
+    }
+    
+}
+
+// [PATCH] /admin/product/edit/:id
+module.exports.editPatch = async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        req.body.price = parseInt(req.body.price);
+        req.body.discountPercentage = parseInt(req.body.discountPercentage);
+        req.body.position = parseInt(req.body.position);
+
+        await ProductCate.updateOne({
+            _id: id,
+            deleted: false
+        }, req.body);
+    
+        req.flash('success', 'edit successfully');
+    
+        res.redirect("back");
+    }
+    catch(error) {
+        req.flash("error", "the product is invalid")
+        res.redirect(`${systemConfig.prefixAdmin}/product-category`);
+    }
+}
+
 // [GET] /admin/product/detail/:id
 module.exports.detail = async (req, res) => {
     const id = req.params.id;
