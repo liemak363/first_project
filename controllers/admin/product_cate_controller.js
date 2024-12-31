@@ -1,10 +1,34 @@
 const ProductCate = require("../../models/product_cate_model.js")
+const filerStatusHelper = require("../../helper/filterStatus.js")
+const searchHelper = require("../../helper/search.js")
 const systemConfig = require("../../config/system.js")
 
 // [GET] /admin/product-category/
-module.exports.product_cate = (req, res) => {
+module.exports.product_cate = async (req, res) => {
+    // filter status
+    const filterStatus = filerStatusHelper(req.query)
+
+    let find = {
+        deleted: false
+    }
+    if (req.query.status) {
+        find.status = req.query.status
+    }
+
+    // filter keyword
+    const objSearch = searchHelper(req.query);
+    if (objSearch.title) {
+        find.title = objSearch.title;
+    }
+
+    const records = await ProductCate.find(find)
+        .sort({position: "desc"})
+
     res.render("./admin/pages/product_cate/index.pug", {
-        pageTitle: "product-category"
+        pageTitle: "product-category",
+        records: records,
+        filterStatus: filterStatus,
+        keyword: objSearch.keyword
     });
 };
 
@@ -17,24 +41,6 @@ module.exports.create = (req, res) => {
 
 // [POST] /admin/product-category/create
 module.exports.createPost = async (req, res) => {
-    // req.body.price = parseInt(req.body.price);
-    // req.body.discountPercentage = parseInt(req.body.discountPercentage);
-    // req.body.numSelled = 0;
-    // req.body.seeding = 0;
-
-    // if (req.body.position == "") {
-    //     const countProducts = await Product.countDocuments();
-    //     req.body.position = countProducts + 1;
-    // } else req.body.position = parseInt(req.body.position);
-
-    // const productNew = new Product(req.body);
-    // await productNew.save();
-
-    // const slug = productNew.slug;
-    // await startApp.clientRedis.set(`productSeeding:${slug}`, '0');
-
-    // res.redirect(`${systemConfig.prefixAdmin}/products`);
-
     if (req.body.position == "") {
         const countProducts = await ProductCate.countDocuments();
         req.body.position = countProducts + 1;
