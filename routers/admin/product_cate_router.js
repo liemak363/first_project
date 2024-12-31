@@ -11,6 +11,9 @@ const controller = require("../../controllers/admin/product_cate_controller.js")
 const productCateValidate = require("../../validates/admin/product_cate_validate.js")
 
 router.get('/', controller.product_cate)
+
+router.patch('/change-status/:status/:id', controller.changeStatus)
+
 router.get('/create', controller.create)
 
 router.post("/create",  upload.single('thumbnail'),

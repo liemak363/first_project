@@ -32,6 +32,24 @@ module.exports.product_cate = async (req, res) => {
     });
 };
 
+// [PATCH] /admin/product-category/change-status/:status/:id
+module.exports.changeStatus = async (req, res) => {
+    const status = req.params.status;
+    const id = req.params.id;
+
+    try {
+        await ProductCate.updateOne({_id: id}, {status: status});
+
+        req.flash('success', 'change successfully');
+    
+        res.redirect('back');
+    }
+    catch(error) {
+        req.flash("error", "the product is invalid")
+        res.redirect(`${systemConfig.prefixAdmin}/product-category`);
+    }
+};
+
 // [GET] /admin/product-category/create
 module.exports.create = (req, res) => {
     res.render("./admin/pages/product_cate/create.pug", {
