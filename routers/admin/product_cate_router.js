@@ -14,6 +14,8 @@ router.get('/', controller.product_cate)
 
 router.patch('/change-status/:status/:id', controller.changeStatus)
 
+router.patch('/change-multi', controller.changeMulti)
+
 router.get('/create', controller.create)
 
 router.post("/create",  upload.single('thumbnail'),

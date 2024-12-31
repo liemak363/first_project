@@ -50,6 +50,67 @@ module.exports.changeStatus = async (req, res) => {
     }
 };
 
+// [PATCH] /admin/product-category/change_status_multi
+module.exports.changeMulti = async (req, res) => {
+    const type = req.body.type;
+    const ids = req.body.ids.split(", ");
+
+    switch (type) {
+        case "active":
+            try {
+                await ProductCate.updateMany({_id: {$in: ids}}, {status: "active"});
+                req.flash('success', 'change successfully');
+            }
+            catch(error) {
+                req.flash("error", "the product is invalid")
+                res.redirect(`${systemConfig.prefixAdmin}/product-category`);
+            }
+            break;
+        case "inactive":
+            try {
+                await ProductCate.updateMany({_id: {$in: ids}}, {status: "inactive"});
+                req.flash('success', 'change successfully');
+            }
+            catch(error) {
+                req.flash("error", "the product is invalid")
+                res.redirect(`${systemConfig.prefixAdmin}/product-category`);
+            }
+            break;
+        case "soft-delete":
+            try {
+                await ProductCate.updateMany({_id: {$in: ids}}, {
+                    deleted: true,
+                    deletedAt: new Date()
+                });
+                req.flash('success', 'delete successfully');
+            }
+            catch(error) {
+                req.flash("error", "the product is invalid")
+                res.redirect(`${systemConfig.prefixAdmin}/product-category`);
+            }
+            break;
+        case "change-position":
+            for (const item of ids) {
+                let [id, position] = item.split("-");
+                position = parseInt(position);
+
+                try {
+                    await ProductCate.updateOne({_id: id}, {position: position});
+                    req.flash('success', 'change successfully');
+                }
+                catch {
+                    req.flash("error", "the product is invalid")
+                    res.redirect(`${systemConfig.prefixAdmin}/product-category`);
+                }
+            }
+            break;
+        default:
+            break;
+    }
+
+    res.redirect('back');
+}
+
 // [GET] /admin/product-category/create
 module.exports.create = (req, res) => {
     res.render("./admin/pages/product_cate/create.pug", {
