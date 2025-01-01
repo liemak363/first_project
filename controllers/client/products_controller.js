@@ -1,3 +1,4 @@
+const BuyLog = require("../../models/buy_log_model.js")
 const Product = require("../../models/product_model.js")
 const index = require("../../index.js");
 
@@ -48,6 +49,19 @@ module.exports.buy = async (req, res) => {
     try {
         const slug = req.params.slug;
         const numberProduct = req.body.numberProducts;
+
+        // const userID = ...
+        // update buy log
+        const product = await Product.findOne({slug: slug})
+        let log = {
+            // userID = userID,
+            userID: "",
+            productId: product.id,
+            price: (product.price*(100 - product.discountPercentage)/100).toFixed(0),
+            quantity: numberProduct
+        }
+        const logRecord = new BuyLog(log)
+        await logRecord.save()
     
         const currentSeeding = parseInt(await index.clientRedis.get(`productSeeding:${slug}`));
         await index.clientRedis.set(`productSeeding:${slug}`, (currentSeeding + numberProduct));

@@ -4,10 +4,10 @@ include ../../mixins/notification.pug
 block main
     +notification-error("5000")
 
-    h1(class="mb-4") Thêm mới sản phẩm
+    h1(class="mb-4") Thêm mới danh mục
     form(
-        action=`${prefixAdmin}/products/create`
-        id="form-create-product"
+        action=`${prefixAdmin}/product-category/create`
+        id="form-create-product-category"
         method="POST"
         enctype="multipart/form-data"
     )
@@ -21,6 +21,14 @@ block main
                 required
             )
         div(class="form-group") 
+            label(for="parent-id") Danh mục cha
+            input(
+                type="text"
+                class="form-control"
+                id="parent-id"
+                name="parent_id"
+            )
+        div(class="form-group") 
             label(for="desc") Mô tả
             textarea(
                 class="form-control tinymce"
@@ -28,27 +36,6 @@ block main
                 name="description"
                 rows="5"
             )
-        div(class="form-group") 
-            label(for="price") Giá
-            input(
-                type="number"
-                class="form-control"
-                id="price" 
-                name="price" 
-                value="0"
-                min="0"
-            )
-        div(class="form-group")
-            label(for="discount") % Giảm giá
-            input(
-                type="number"
-                class="form-control"
-                id="discount"
-                name="discountPercentage"
-                value="0"
-                min="0"
-            )
-        
         div(
             class="form-group"
             upload-image
@@ -100,5 +87,3 @@ block main
                 type="submit"
                 class="btn btn-primary"
             ) Tạo mới
-
-    script(src="/admin/js/product.js")

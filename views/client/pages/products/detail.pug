@@ -26,7 +26,7 @@ block main
             )
 
     if (product.description)
-        div(class="mb-4") #{product.description}
+        div(class="mb-4") !{product.description}
 
     form(
         action=`/products/buy/${product.slug}`
