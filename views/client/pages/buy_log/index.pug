@@ -1,4 +1,5 @@
 extends ../../layouts/default.pug 
+include ../../mixins/pagination.pug
 
 block main 
     h1 Lịch sử mua hàng 
@@ -40,3 +41,7 @@ block main
                                 td
                                     a(href=`/products/detail/${item.slug}`)
                                         button(class="btn btn-info btn-sm") Chi tiết
+
+    +pagination(pagination)
+
+    script(src="/js/pagination.js")

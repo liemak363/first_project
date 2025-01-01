@@ -37,5 +37,6 @@ module.exports.buyLog = async (req, res) => {
     res.render("./client/pages/buy_log/index.pug", {
         pageTitle: "buy log",
         records: records,
+        pagination: objectPagination
     });
 }
