@@ -48,7 +48,7 @@ module.exports.detail = async (req, res) => {
 module.exports.buy = async (req, res) => {
     try {
         const slug = req.params.slug;
-        const numberProduct = req.body.numberProducts;
+        const numberProduct = parseInt(req.body.numberProducts);
 
         // const userID = ...
         // update buy log
